@@ -250,14 +250,66 @@ Both of them achieve state-of-the-art performance among similar-sized models, wi
 </tbody>
 </table>
 
+## 🔍 Usage Example
 
-## 🚀 (Coming Soon) Code & Models
+Below is a simple example of how to use Metis-RISE series models for multimodal reasoning tasks:
 
-We plan to release the code in the near future. Stay tuned!
+```python
+from transformers import Qwen2_5_VLForConditionalGeneration, AutoProcessor
+from qwen_vl_utils import process_vision_info
 
-## 🙏 Acknowledgement
-We sincerely appreciate [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory) and [OpenRLHF](https://github.com/OpenRLHF/OpenRLHF) for providing high-quality training framework.
+# Load model (choose between 7B or 72B version)
+model_path = 'mmthinking/Metis-RISE-7B' # or mmthinking/Metis-RISE-72B
 
-## 📖 Citation
+# Load the model on the available device(s)
+model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+    model_path, torch_dtype="auto", device_map="auto"
+)
 
-Coming soon
+# Best practices to use the following system_prompt and pixel range by default
+system_prompt = """Solve the question. The user asks a question, and you solves it. You first thinks about the reasoning process in the mind and then provides the user with the answer. The answer is in latex format and wrapped in $...$. The final answer must be wrapped using the \\boxed{} command. The reasoning process and answer are enclosed within <think> </think> and <answer> </answer> tags, respectively, i.e., <think> Since $1+1=2$, so the answer is $2$. </think><answer> The answer is $\\boxed{2}$ </answer>, which means assistant's output should start with <think> and end with </answer>."""
+
+processor = AutoProcessor.from_pretrained(model_path, min_pixels=128*28*28, max_pixels=16384*28*28)
+
+# Prepare input with image and text
+messages = [
+    {
+        "role": "system",
+        "content": system_prompt
+    },
+    {
+        "role": "user",
+        "content": [
+            {
+                "type": "image",
+                "image": "assets/example_case.jpg",
+            },
+            {"type": "text", "text": "If the pattern continues, what would be the Y value when X=11?"},
+        ],
+    }
+]
+
+# Preparation for inference
+text = processor.apply_chat_template(
+    messages, tokenize=False, add_generation_prompt=True
+)
+image_inputs, video_inputs = process_vision_info(messages)
+inputs = processor(
+    text=[text],
+    images=image_inputs,
+    videos=video_inputs,
+    padding=True,
+    return_tensors="pt",
+)
+inputs = inputs.to(model.device)
+
+# Inference: Generation of the output
+generated_ids = model.generate(**inputs, max_new_tokens=8192)
+generated_ids_trimmed = [
+    out_ids[len(in_ids) :] for in_ids, out_ids in zip(inputs.input_ids, generated_ids)
+]
+output_text = processor.batch_decode(
+    generated_ids_trimmed, skip_special_tokens=True, clean_up_tokenization_spaces=False
+)
+print(output_text[0])
+```

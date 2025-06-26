@@ -2,25 +2,24 @@
 
 <h5 align="center">
 
-[![arXiv](https://img.shields.io/badge/Arxiv-2506.13056-b31b1b.svg?logo=arXiv)](https://arxiv.org/abs/2506.13056)&ensp;[![Code License](https://img.shields.io/badge/License-Apache_2.0-green.svg)](https://github.com/tatsu-lab/stanford_alpaca/blob/main/LICENSE)
+[![arXiv](https://img.shields.io/badge/Arxiv-2506.13056-b31b1b.svg?logo=arXiv)](https://arxiv.org/abs/2506.13056)&ensp;<a href='https://huggingface.co/collections/mmthinking/metis-rise-685cac221b6a0d9571db7f8b'><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face%20-models-blue'></a>&ensp;[![Code License](https://img.shields.io/badge/License-Apache_2.0-green.svg)](https://github.com/tatsu-lab/stanford_alpaca/blob/main/LICENSE)
 
 </h5>
 
 
-
 ## 💡 Overview
 
-We introduces **Metis-RISE** (**R**L **I**ncentivizes and **S**FT **E**nhances), a hybrid training paradigm that strategically sequences RL and SFT to significantly advance multimodal reasoning in MLLMs. By prioritizing RL-driven exploration, Metis-RISE incentivizes the model to unlock latent reasoning skills and avoids premature convergence often seen in SFT-first approaches. Subsequently, targeted SFT stages enhance these capabilities by efficiently addressing inconsistent reasoning through self-distilled trajectories and rectifying fundamental capability absence via expert knowledge injection.
+We introduces **Metis-RISE** (**R**L **I**ncentivizes and **S**FT **E**nhances), a hybrid training paradigm that strategically sequences RL and SFT to significantly advance multimodal reasoning in MLLMs. By prioritizing RL-driven exploration, Metis-RISE incentivizes the model to unlock latent reasoning skills and avoids premature convergence often seen in SFT-first approaches. Subsequently, targeted SFT stages enhance these capabilities by efficiently addressing inconsistent reasoning through self-distilled trajectories and rectifying fundamental capability absence via expert knowledge injection. Metis-RISE-72B scores an average of 56.6 on the [OpenCompass Multimodal Reasoning Leaderboard](https://rank.opencompass.org.cn/leaderboard-multimodal-reasoning/?m=REALTIME), ranking tied for **fourth** on the overall leaderboard (as of June 26, 2025).
 
 <img src="assets/framework.png" alt="Metis-RISE Framework Overview" style="width:850px; max-width:100%;">
 
 ## 📢 News
-- **[2025-06-16]** We release [Metis-RISE: RL Incentivizes and SFT Enhance Multimodal Reasoning Model Learning](https://arxiv.org/abs/2506.13056) on Arxiv! 🎉🎉🎉
+- **[2025-06-23]** 🚀 Both Metis-RISE 7B and 72B model checkpoints are now available on [🤗 HuggingFace](https://huggingface.co/collections/mmthinking/metis-rise-685cac221b6a0d9571db7f8b)! 
+- **[2025-06-16]** 🎉 We release the technical report of Metis-RISE on [Arxiv](https://arxiv.org/abs/2506.13056)! 
 
 
 ## 📊 Results
-We evaluate both **Metis-RISE-7B** and **Metis-RISE-72B** on the comprehensive [**OpenCompass Multimodal Reasoning Leaderboard**](https://rank.opencompass.org.cn/leaderboard-multimodal-reasoning/?m=REALTIME).
-Both of them achieve state-of-the-art performance among similar-sized models, with the 72B version ranking fourth overall on the full leaderboard (as of June 16, 2025), validating the effectiveness and scalability of the Metis-RISE framework for enhancing multimodal reasoning.
+We evaluate both **Metis-RISE-7B** and **Metis-RISE-72B** on the comprehensive [OpenCompass Multimodal Reasoning Leaderboard](https://rank.opencompass.org.cn/leaderboard-multimodal-reasoning/?m=REALTIME). Both of them achieve state-of-the-art performance among similar-sized models, with the 72B version ranking fourth overall on the full leaderboard (as of June 26, 2025), validating the effectiveness and scalability of the Metis-RISE framework for enhancing multimodal reasoning.
 
 <table>
 <thead>
@@ -122,7 +121,7 @@ Both of them achieve state-of-the-art performance among similar-sized models, wi
 <td align="center">54.4</td>
 </tr>
 <tr style="background-color: #f0f0f0;">
-<td colspan="8" align="center"><strong><em>≤10B Models</em></strong></td>
+<td colspan="8" align="center"><strong><em>Open-source ≤10B Models</em></strong></td>
 </tr>
 <tr>
 <td>Kimi-VL-A3B-Instruct</td>
@@ -175,7 +174,7 @@ Both of them achieve state-of-the-art performance among similar-sized models, wi
 <td align="center"><strong>49.7</strong></td>
 </tr>
 <tr style="background-color: #f0f0f0;">
-<td colspan="8" align="center"><strong><em>>10B Models</em></strong></td>
+<td colspan="8" align="center"><strong><em>Open-source >10B Models</em></strong></td>
 </tr>
 <tr>
 <td>InternVL3-14B</td>
@@ -312,4 +311,27 @@ output_text = processor.batch_decode(
     generated_ids_trimmed, skip_special_tokens=True, clean_up_tokenization_spaces=False
 )
 print(output_text[0])
+```
+
+## 🤗 Checkpoints
+
+| Model        |Huggingface                                                                              |
+| ------------ | ---------------------------------------------------------------------------------------- |
+| Metis-RISE-7B   | [mmthinking/Metis-RISE-7B](https://huggingface.co/mmthinking/Metis-RISE-7B)       |
+| Metis-RISE-72B   | [mmthinking/Metis-RISE-72B](https://huggingface.co/mmthinking/Metis-RISE-72B)       |
+
+
+
+## 📌 Acknowledgement
+We sincerely appreciate [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory) and [MM-EUREKA](https://github.com/ModalMinds/MM-EUREKA) for providing reference training framework.
+
+## 📖 Citation
+
+```bibtex
+@article{qiu2025metis,
+  title={Metis-RISE: RL Incentivizes and SFT Enhances Multimodal Reasoning Model Learning},
+  author={Qiu, Haibo and Lan, Xiaohan and Liu, Fanfan and Sun, Xiaohu and Ruan, Delian and Shi, Peng and Ma, Lin},
+  journal={arXiv preprint arXiv:2506.13056},
+  year={2025}
+}
 ```
